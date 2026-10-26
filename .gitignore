@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Office 临时文件
+~$*.xlsx
+~$*.docx
+*.tmp
+
+# 系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 数据（原始数据若要公开则删掉这几行）
+# data/raw.csv
