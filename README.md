@@ -123,7 +123,9 @@ tile-industry-analysis/
 │   ├── raw.csv              # 原始数据登记（一行一个数据点）
 │   ├── scorecard_auto.csv   # score.py 生成的建议得分表
 │   ├── 采集说明.md          # 每个指标的数据来源、链接、缺失原因
-│   └── 本期结论.md          # 当期结论草稿（12 项明细 + 迭代轨迹）
+│   ├── 本期结论.md          # 当期结论草稿（12 项明细 + 迭代轨迹）
+│   ├── 证据汇总.csv         # 全部证据合并表（可排序、可透视）
+│   └── evidence/            # 一份文档一个 JSON + 汇总.md（格式与校验）
 ├── docs/
 │   ├── 操作指导书.docx      # ★ 照着做的 8 周指导书（打印版）
 │   ├── 操作指导书.md        # 同上，Markdown 版
@@ -137,14 +139,15 @@ tile-industry-analysis/
 │   ├── 04_red_team.md
 │   └── 05_report_writing.md
 ├── reports/
-│   └── 2026Q3_report.md     # 季度报告模板
+│   └── 2026Q3_report.md     # 2026Q3 正式季度报告（8 节 + 3 附录）
 └── src/
     ├── build_workbooks.py      # 重新生成三个 xlsx
     ├── score.py                # 读 raw.csv，算变化和建议得分
     ├── fill_raw_q3.py          # 本期数据入库（可审计的采集台账）
     ├── fill_scorecard.py       # 建议得分回填 Excel
     ├── adjust_scores.py        # 人工判断覆盖 + 独立复算
-    └── weight_sensitivity.py   # 权重敏感性测试
+    ├── weight_sensitivity.py   # 权重敏感性测试
+    └── merge_evidence.py       # 证据 JSON 合并 + 字段校验 + 失衡报警
 ```
 
 ## 怎么用（每周约 2 小时）
@@ -230,6 +233,7 @@ py -3.13 src/build_workbooks.py
 - [x] **权重敏感性测试**
 - [x] **首份季度报告（2026Q3）** → `reports/2026Q3_report.md`
 - [x] **红队自检** → `docs/红队自检.md`（推翻了自己"1:1 传导"的假设）
+- [x] **证据库首轮（4 份文档 / 23 条）** → `data/evidence/`，`merge_evidence.py` 自动校验
 - [x] **首期判断已登记** → `forecast_log.xlsx`（验证日 2027-01-31）
 - [ ] 首次复盘（等 2027-01 数据回来结算）
 
