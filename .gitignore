@@ -15,5 +15,9 @@ venv/
 Thumbs.db
 desktop.ini
 
+# 备份文件（脚本自动生成，不进版本库）
+*_备份.xlsx
+*.new.csv
+
 # 数据（原始数据若要公开则删掉这几行）
 # data/raw.csv

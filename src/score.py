@@ -91,7 +91,19 @@ def suggest_score(delta_pp: float, direction: str, latest: float) -> tuple[int, 
 def load_raw(raw_path: Path) -> pd.DataFrame:
     if not raw_path.exists():
         raise SystemExit(f"找不到 {raw_path}，请先按 data/raw.csv 的格式录入数据")
-    df = pd.read_csv(raw_path, encoding="utf-8-sig")
+
+    # Excel/WPS 保存 CSV 时默认用 GBK（ANSI），脚本自己写的用 UTF-8。
+    # 两种都要能读，否则「Excel 改完 → 脚本报错」会变成日常。
+    df = None
+    for enc in ("utf-8-sig", "gbk", "utf-8"):
+        try:
+            df = pd.read_csv(raw_path, encoding=enc)
+            break
+        except UnicodeDecodeError:
+            continue
+    if df is None:
+        raise SystemExit(f"读不了 {raw_path}：编码既不是 UTF-8 也不是 GBK，请另存为 CSV(UTF-8)")
+
     need = {"日期", "指标", "值"}
     missing = need - set(df.columns)
     if missing:
@@ -146,6 +158,8 @@ def main() -> None:
             "类别": cat, "指标": name, "方向": direction, "权重": weight,
             "最新值": latest, "上期值": prev, "变化pp": round(delta, 2),
             "建议得分": score, "依据": why,
+            # 数据所属期：取该指标最新观测的日期，回填 Excel 时用它
+            "数据日期": latest_row["日期"].strftime("%Y-%m-%d"),
         })
 
     out = pd.DataFrame(rows)
